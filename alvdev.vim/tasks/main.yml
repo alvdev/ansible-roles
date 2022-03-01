@@ -1,0 +1,26 @@
+---
+- name: Customize Vim in Ubuntu
+  blockinfile:
+    path: "{{ ubuntuPath }}"
+    marker: '"{mark} MANAGED ANSIBLE BLOCK"'
+    block: |
+      "alvdev"
+      autocmd FileType yml,yaml setlocal ai ts=2 sts=2 sw=2 expandtab
+      set nu
+      syntax on
+      set cursorline
+      set mouse=a
+  when: ansible_os_family == "Debian"
+
+- name: Customize Vim RedHat
+  blockinfile:
+    path: "{{ redhatPath }}"
+    marker: '"{mark} MANAGED ANSIBLE BLOCK"'
+    block: |
+      "alvdev"
+      autocmd FileType yml,yaml setlocal ai ts=2 sts=2 sw=2 expandtab
+      set nu
+      syntax on
+      set cursorline
+      set mouse=a
+  when: ansible_os_family == "RedHat"
