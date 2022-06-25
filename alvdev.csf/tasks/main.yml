@@ -1,0 +1,6 @@
+---
+- name: Get CSF installation script
+  get_url:
+    url:
+    dest: '{{ downloadsPath }}'
+    mode: u+x
