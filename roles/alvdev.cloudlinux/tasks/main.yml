@@ -1,0 +1,22 @@
+---
+- name: Check if download directory exists
+  stat:
+    path: '{{ downloadsPath }}'
+  register: downloads
+
+- name: Test message to check downloads directory
+  debug:
+    msg: '{{ downloadsPath }} Downloads directory exists'
+  when: not downloads.stat.exists
+
+- name: Create downloads directory
+  file:
+    path: '{{ downloadsPath }}'
+    state: directory
+  when: not downloads.stat.exists
+
+- name: Download CloudLinux deploy script
+  get_url:
+    url: https://repo.cloudlinux.com/cloudlinux/sources/cln/cldeploy
+    dest: '{{ downloadsPath }}/cloudlinux'
+    mode: u+x
