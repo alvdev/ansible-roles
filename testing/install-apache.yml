@@ -1,0 +1,24 @@
+---
+
+- hosts: all
+  tasks:
+    - name: Install apache on Debian family servers
+      apt:
+        name: apache2
+      when:
+        ansible_os_family == "Debian"
+    
+    - name: Install apache on RedHat family servers
+      dnf:
+        name: httpd
+        state: latest
+      when:
+        ansible_os_family == "RedHat"
+
+    - name: Start apache
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+      when:
+        ansible_os_family == "RedHat"

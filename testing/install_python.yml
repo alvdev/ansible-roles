@@ -1,0 +1,11 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+    - name: Install Python3
+      package:
+        name:
+          - python3
+          - policycoreutils-python-utils
+
