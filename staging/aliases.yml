@@ -2,6 +2,10 @@
 
 - hosts: all
   become: true
+  vars:
+    - aliases: |
+        alias ll="ls -lah --group-directories-first --color=always"
+        alias spam="perl <(curl -s https://raw.githubusercontent.com/cPanelTechs/SSE/master/sse.pl) -s"
   
   tasks:
     #
@@ -9,7 +13,7 @@
     #
     - name: Check if .bashrc exists
       stat:
-          path: '{{ ansible_env.PWD }}/.bashrc'
+        path: '{{ ansible_env.PWD }}/.bashrc'
       register: bashrc
 
     - name: Add code to .bashrc file if exists
@@ -26,7 +30,7 @@
       lineinfile:
         path: '{{ ansible_env.PWD }}/.bashrc'
         insertbefore: '^# BEGIN ANSIBLE MANAGED BLOCK'
-        line: 'XXXXXXXXXXXXXXX'
+        line: ''
     
     #
     # zshrc file section
@@ -67,6 +71,4 @@
         path: '{{ ansible_env.PWD }}/.aliases'
         marker: '# {mark} ANSIBLE MANAGED BLOCK for custom alias'
         block: |
-          alias ll="ls -lah --group-directories-first --color=always"
-          alias spam="perl <(curl -s https://raw.githubusercontent.com/cPanelTechs/SSE/master/sse.pl) -s"
-
+          {{ aliases }}
