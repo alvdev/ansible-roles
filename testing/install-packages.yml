@@ -1,3 +1,26 @@
 ---
-hosts: all
-become: true
+- name: Install personal use packages
+  hosts: local
+  vars:
+    - packages_os_family: ansible_os_family
+    - packages_vars:
+      - packages_apache: "{{ 'httpd' if ansible_os_family == 'RedHat' else 'apache2'}}" 
+    - packages_items:
+      - tree
+      - vim
+  tasks:
+    - name: Install packages on RedHat based systems
+      dnf:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        "{{ packages_items }}"
+      when: ansible_os_family == "RedHat"
+
+    - name: Install packages on Debian based systems
+      apt:
+        name: "{{ item }}"
+        state: absent
+      with_items:
+        "{{ packages_items }}"
+      when: ansible_os_family == "Debian"
