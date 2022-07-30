@@ -5,13 +5,14 @@
     - name: Install apache on Debian family servers
       apt:
         name: apache2
+        state: present
       when:
         ansible_os_family == "Debian"
     
     - name: Install apache on RedHat family servers
       dnf:
         name: httpd
-        state: latest
+        state: present
       when:
         ansible_os_family == "RedHat"
 
