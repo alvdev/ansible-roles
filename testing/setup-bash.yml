@@ -1,0 +1,22 @@
+---
+- name: Setup bash
+  hosts: all
+  become: true
+  tasks:
+    - name: Configure prompt
+      blockinfile:
+        path: /etc/bashrc
+        marker: "# {mark} ANSIBLE MANAGED BLOCK for bash prompt"
+        block: |
+          force_color_prompt=yes
+          function nonzero_return() {
+                  RETVAL=$?
+                  [ $RETVAL -ne 0 ] && echo "$RETVAL"
+          }
+          
+          if [ "$LOGNAME" = root ] || [ "`id -u`" -eq 0 ] ; then
+                  PS1="\n\[\e[01;31m\][\[\e[m\] \[\e[31m\]\u\[\e[m\]@\[\e[37m\]\H\[\e[m\] : \[\e[31m\]\w\[\e[m\] \[\e[31m\]]\[\e[m\] \[\e[31m\]\`nonzero_return\`\[\e[m\]\n\[\e[31m\]\\$\[\e[m\] "
+          else
+                  PS1="\n[ \[\e[32m\]\u\[\e[m\]@\[\e[01;36m\]\H\[\e[m\] : \[\e[01;33m\]\w\[\e[m\] ] \[\e[01;31m\]\`nonzero_return\`\[\e[m\]\n\\$ "
+          fi
+
