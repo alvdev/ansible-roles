@@ -3,7 +3,7 @@
 - hosts: all
   become: true
   vars:
-    user: "alvdev"
+    user: "user"
   tasks:
     - name: Install Vim
       package:
@@ -13,15 +13,15 @@
 
     - name: Create .vimrc file if not exists
       file:
-        path: '{{ ansible_env.PWD }}/.vimrc'
-        owner: '{{ ansible_env.SUDO_USER }}'
-        group: '{{ ansible_env.SUDO_USER }}'
+        path: '/home/{{ user }}/.vimrc'
+        owner: '{{ user }}'
+        group: '{{ user }}'
         state: touch
     
     - name: Insert Vim setup lines 
       blockinfile:
-       path: '{{ ansible_env.PWD }}/.vimrc'
-       marker: '"{mark} MANAGED ANSIBLE BLOCK'
+       path: '/home/{{ user }}/.vimrc'
+       marker: '" {mark} MANAGED ANSIBLE BLOCK for vim setup'
        block: |
          autocmd FileType yml,yaml setlocal ai ts=2 sts=2 sw=2 expandtab
          " Set shift width to 4 spaces.
@@ -68,7 +68,7 @@
          set history=1000
          set nu
          syntax on
-         "set cursorline"
+         "set cursorline
          set mouse=a
          filetype on
          filetype indent on
