@@ -1,1 +1,0 @@
-{{ sudoUser }} ALL:ALL  NOPASSWD:ALL
