@@ -1,5 +1,5 @@
 ---
-- hosts: alma
+- hosts: local
   tasks:
     - name: Add 2200 to csf.conf
       lineinfile:
