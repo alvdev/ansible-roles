@@ -1,4 +1,0 @@
----
-ns_primary: ns1.domain.com
-ns_secondary: ns2.domain.com
-alvdev_cpanel_backup_config: for $i in cpanel::easy::apache cpanel::smtp::exim cpanel::system::autossloptions cpanel::system::backups cpanel::system::greylist cpanel::system::hulk cpanel::system::modsecurity cpanel::system::mysql cpanel::system::whmconf cpanel::ui::themes; do touch /usr/local/cpanel/bin/cpconftool --backup --modules=$i; done
