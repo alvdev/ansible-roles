@@ -1,0 +1,21 @@
+---
+- name: Update all packages on RedHat and Debian OS
+  hosts: all
+  tasks:
+
+    # RedHat tasks
+    - name: Update RedHat servers
+      dnf:
+        name: '*'
+        state: latest
+      when: ansible_os_family == 'RedHat'
+    
+    # Debian tasks
+    - name: Update Debian servers
+      apt:
+        update_cache: yes
+        upgrade: dist
+      when: ansible_is_family == 'Debian'
+
+
+        

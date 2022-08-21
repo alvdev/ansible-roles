@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  author: Alv Dev
+  description: Molecule testing role
+  company: alv.dev
+  namespace: alvdev
+
+  license: MIT
+
+  min_ansible_version: 2.9
+
+  platforms:
+    - name: rhel8
+      versions:
+        - 8
+    - name: ubuntu20
+      versions:
+      - 20.04
+
+  galaxy_tags: []
+
+dependencies: []

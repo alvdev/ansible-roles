@@ -1,0 +1,12 @@
+---
+- name: Deploy cPanel server
+  hosts: all
+  
+  vars:
+    #maldet_version: '1.6.4'
+    #maldet_default_monitor_mode: users
+    #maldet_service_enabled: true
+
+  roles:
+    #- role: cloudweeb.maldet
+    - role: likg.csf
