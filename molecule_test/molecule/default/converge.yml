@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include alvdev.molecule_test"
+      include_role:
+        name: "alvdev.molecule_test"
