@@ -1,0 +1,73 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+    - name: Unzip downloaded Bat file
+      unarchive:
+        src: https://github.com/sharkdp/bat/releases/download/v0.18.2/bat-v0.18.2-x86_64-unknown-linux-musl.tar.gz
+        dest: '{{ ansible_env.PWD }}'
+        remote_src: yes
+        list_files: yes
+      register: theFiles
+      when:
+        ansible_os_family == "RedHat"
+
+    - name: Find the cat file
+      shell:
+        'ls bat*/bat'
+      register: catFile
+      when:
+        ansible_os_family == "RedHat"
+
+    - name: Print the extrated files
+      debug:
+        msg: 'The files are: {{ catFile }}'
+      when:
+        ansible_os_family == "RedHat"
+
+    - name: Copy bat to /usr/local/bin
+      copy:
+        src: '{{ ansible_env.PWD }}/{{ catFile.stdout }}'
+        dest: /usr/local/bin
+        mode: 0755 
+        remote_src: yes
+      when:
+        ansible_os_family == "RedHat"
+
+    - name: Add bat alias for RedHat family
+      blockinfile:
+        path: '{{ ansible_env.PWD }}/.bashrc'
+        marker: '# {mark} ANSIBLE MANAGED BLOCK for Cat'
+        block: |
+          alias cat='bat'
+      when:
+        ansible_os_family == "RedHat"
+
+    - name: Install Bat package for Debian family
+      apt:
+        name: bat
+        state: latest
+      when:
+        ansible_os_family == "Debian"
+        
+    - name: Check if Bat is present
+      package_facts:
+        manager: "auto"
+
+    - name: Add bat alias for Debian family
+      blockinfile:
+        path: '{{ ansible_env.PWD }}/.bashrc'
+        marker: '# {mark} ANSIBLE MANAGED BLOCK for Cat'
+        block: |
+          alias cat='batcat'
+      when:
+        (ansible_os_family == "Debian") or ('bat' in ansible_facts.packages)
+
+    - name: Remove bat alias from Debian family
+      blockinfile:
+        path: '{{ ansible_env.PWD }}/.bashrc'
+        marker: '# {mark} ANSIBLE MANAGED BLOCK for Cat'
+        block: ''
+      when:
+        (ansible_os_family == "Debian") and ('bat' not in ansible_facts.packages)
