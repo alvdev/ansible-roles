@@ -8,8 +8,8 @@ platforms:
     image: almalinux/8-base
     pre_build_image: true
 
-  - name: ubuntu101
-    image: ubuntu:latest
+  - name: ubuntu
+    image: ubuntu
     pre_build_image: true
 
 provisioner:
