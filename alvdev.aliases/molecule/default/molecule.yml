@@ -4,9 +4,14 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: instance
-    image: quay.io/centos/centos:stream8
+  - name: alma8-base
+    image: almalinux/8-base
     pre_build_image: true
+
+  - name: ubuntu101
+    image: ubuntu:latest
+    pre_build_image: true
+
 provisioner:
   name: ansible
 verifier:
