@@ -1,0 +1,13 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: alma8-base
+    image: almalinux/8-base
+    pre_build: true
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
