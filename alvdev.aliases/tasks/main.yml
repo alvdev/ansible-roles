@@ -5,12 +5,12 @@
 #
 - name: Check if .bashrc exists
   stat:
-    path: '{{ ansible_env.PWD }}/.bashrc'
+    path: '/home/{{ aliases_user }}/.bashrc'
   register: bashrc
 
 - name: Add code to .bashrc file if exists
   blockinfile:
-    path: '{{ ansible_env.PWD }}/.bashrc'
+    path: '/home/{{ aliases_user }}/.bashrc'
     marker: '# {mark} ANSIBLE MANAGED BLOCK for custom alias file'
     block: |
       if [ -f ~/.aliases ]; then
@@ -20,21 +20,21 @@
 
 - name: Insert blank line before the marker
   lineinfile:
-    path: '{{ ansible_env.PWD }}/.bashrc'
+    path: '/home/{{ aliases_user }}/.bashrc'
     insertbefore: '^# BEGIN ANSIBLE MANAGED BLOCK'
-    line: ''
+    line: ' '
 
 #
 # zshrc file section
 #
 - name: Check if .zshrc exists
   stat:
-    path: '{{ ansible_env.PWD }}/.zshrc'
+    path: '/home/{{ aliases_user }}/.zshrc'
   register: zshrc
 
 - name: Add code to .zshrc file if exists
   blockinfile:
-    path: '{{ ansible_env.PWD }}/.zshrc'
+    path: '/home/{{ aliases_user }}/.zshrc'
     marker: '# {mark} ANSIBLE MANAGED BLOCK for custom alias file'
     block: |
       if [ -f ~/.aliases ]; then
@@ -45,22 +45,22 @@
 #
 # Alias file section
 #
-- name: Check if .alias file exists
+- name: "Check if .alias file exists in /home/{{ aliases_user }}" 
   stat:
-    path: '{{ ansible_env.PWD }}/.aliases'
+    path: '/home/{{ aliases_user }}/.aliases'
   register: alias
 
 - name: Create .aliases file
   file:
-    path: '{{ ansible_env.PWD }}/.aliases'
+    path: '/home/{{ aliases_user }}/.aliases'
     state: touch
-    owner: '{{ ansible_user }}'
-    group: '{{ ansible_user }}'
+    owner: '{{ aliases_user }}'
+    group: '{{ aliases_user }}'
   when: not alias.stat.exists
 
 - name: Setup custom aliases
   blockinfile:
-    path: '{{ ansible_env.PWD }}/.aliases'
+    path: '/home/{{ aliases_user }}/.aliases'
     marker: '# {mark} ANSIBLE MANAGED BLOCK for custom alias'
-    block: |
-      {{ aliases }}
+    block: 
+      "{{ aliases }}"
