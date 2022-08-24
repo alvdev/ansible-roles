@@ -9,7 +9,7 @@ platforms:
     pre_build_image: true
 
   - name: ubuntu
-    image: ubuntu
+    image: geerlingguy/docker-ubuntu2204-ansible
     pre_build_image: true
 
 provisioner:
