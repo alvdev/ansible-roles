@@ -4,3 +4,5 @@
   roles:
     - role: alvdev.aliases
       become: false
+      vars:
+        aliases_user: alvdev
