@@ -1,4 +1,15 @@
 ---
+- name: "Check if {{ aliases_user }} exists"
+  getent:
+    database: passwd
+    key: "{{ aliases_user }}"
+    fail_key: False
+  register: check_user
+
+- name: Create user if not exist
+  user:
+    name: "{{ aliases_user }}"
+  when: check_user
 
 #
 # bashrc file section
