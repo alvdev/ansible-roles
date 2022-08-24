@@ -1,0 +1,10 @@
+---
+# vars file for aliases
+#
+aliases: |
+  alias ll="ls -lah --group-directories-first --color=always"
+  alias spam="perl <(curl -s https://raw.githubusercontent.com/cPanelTechs/SSE/master/sse.pl) -s"
+
+aliases_user: alvdev
+
+

@@ -1,0 +1,6 @@
+---
+- name: Deploy servers
+  hosts: local
+  roles:
+    - role: alvdev.aliases
+      become: false
