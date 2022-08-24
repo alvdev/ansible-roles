@@ -4,7 +4,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: alma8-base
+  - name: alma8
     image: almalinux/8-base
     pre_build_image: true
 
@@ -16,3 +16,7 @@ provisioner:
   name: ansible
 verifier:
   name: ansible
+lint: |
+  set -e
+  yamllint .
+  ansible-lint

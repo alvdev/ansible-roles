@@ -3,7 +3,7 @@
   getent:
     database: passwd
     key: "{{ aliases_user }}"
-    fail_key: False
+    fail_key: false
   register: check_user
 
 - name: Create user if not exist
@@ -56,7 +56,7 @@
 #
 # Alias file section
 #
-- name: "Check if .alias file exists in /home/{{ aliases_user }}" 
+- name: "Check if .alias file exists in /home/{{ aliases_user }}"
   stat:
     path: '/home/{{ aliases_user }}/.aliases'
   register: alias
@@ -73,5 +73,5 @@
   blockinfile:
     path: '/home/{{ aliases_user }}/.aliases'
     marker: '# {mark} ANSIBLE MANAGED BLOCK for custom alias'
-    block: 
+    block:
       "{{ aliases }}"
