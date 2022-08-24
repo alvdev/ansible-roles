@@ -1,0 +1,65 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: rhel8
+    image: registry.access.redhat.com/ubi8/ubi-init
+    pre_build_image: true
+    privileged: true
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    capabilities:
+      - SYS_ADMIN
+    command: /sbin/init
+    override_command: false # Needed for docker
+
+  - name: ubuntu20
+    image: jrei/systemd-ubuntu
+    #tmpfs:
+    #  - /tmp
+    #  - /run
+    #  - /run/lock
+    #volumes:
+    #  - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    #privileged: yes
+    #command: /lib/systemd/systemd
+    #override_command: false
+    pre_build_image: true
+
+    #  - name: debian
+    #    image: jrei/systemd-debian
+    #    command: /lib/systemd/systemd
+    #    privileged: true
+    #    #    volumes:
+    #    #      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    #    pre_build_image: true
+    #
+    #  - name: ubuntu18
+    #    #image: docker-ubuntu1804-ansible:latest
+    #    image: solita/ubuntu-systemd:18.04
+    #    #command: ${MOLECULE_DOCKER_COMMAND:-""}
+    #    #volumes:
+    #    #  - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    #    privileged: true
+    #    pre_build_image: true
+    #    override_command: false
+
+provisioner:
+  name: ansible
+  #config_options:
+  #  defaults:
+  #    interpreter_python: auto_silent
+  #    #callback_whitelist: profile_tasks, timer, yaml
+  #  ssh_connection:
+  #    pipelining: false
+verifier:
+  name: ansible
+lint: |
+  set -e
+  yamllint .
+  ansible-lint .

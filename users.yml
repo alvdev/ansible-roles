@@ -1,0 +1,32 @@
+---
+- hosts: all
+  gather_facts: no
+  vars:
+    users:
+      - antonio
+      - anacleto
+      - ana
+    users2:
+      - chanchito
+      - chavo
+      - chicle
+  tasks:
+
+  - name: Create users with loop
+    user:
+      name: '{{ item }}'
+    loop:
+      - pepe
+      - perico
+      - paco
+
+  - name: Create users with items
+    user:
+      name: '{{ item }}'
+    with_items: '{{ users }}'
+
+
+  - name: Create users only with vars array
+    user:
+      name: '{{ item }}'
+    loop: '{{ users2 }}'
