@@ -7,11 +7,9 @@ platforms:
   - name: alma8
     image: almalinux/8-base
     pre_build_image: true
-
   - name: ubuntu
     image: geerlingguy/docker-ubuntu2204-ansible
     pre_build_image: true
-
 provisioner:
   name: ansible
 verifier:

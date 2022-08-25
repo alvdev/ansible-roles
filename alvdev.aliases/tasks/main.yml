@@ -34,6 +34,7 @@
     path: '/home/{{ aliases_user }}/.bashrc'
     insertbefore: '^# BEGIN ANSIBLE MANAGED BLOCK'
     line: ' '
+  when: bashrc.stat.exists
 
 #
 # zshrc file section
