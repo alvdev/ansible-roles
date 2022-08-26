@@ -3,7 +3,7 @@
   hosts: local
   become: true
   vars:
-    cloudlinux_key: key empty
+    cloudlinux_key: empty key
   tasks:
     - name: Download CloudLinux deploy script
       ansible.builtin.get_url:
@@ -18,10 +18,16 @@
 
     - name: Begin CloudLinux installation with key
       ansible.builtin.command:
-        'sh /usr/src/cldeploy -k {{ cloudlinux_key }}'
-      when: cloudlinux_key != "key empty"
+        "sh /usr/src/cldeploy -k {{ cloudlinux_key }}"
+      register: with_key
+      when: cloudlinux_key != "empty key"
 
     - name: Begin CloudLinux installation with IP
       ansible.builtin.command:
         sh /usr/src/cldeploy -i
-      when: cloudlinux_key == "key empty"
+      register: with_ip
+      when: cloudlinux_key == "empty key"
+
+    - name: Reboot server if successfully installed
+      ansible.builtin.reboot:
+      when: with_key.changed or with_ip.changed
