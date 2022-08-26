@@ -1,2 +1,29 @@
 ---
-# tasks file for cloudlinux
+- name: Check if CloudLinux is installed
+  ansible.builtin.command:
+    rhn_check
+  register: rhn_check
+  changed_when: rhn_check.stdout.find('ERROR') != -1
+
+- name: Download CloudLinux deploy script
+  ansible.builtin.get_url:
+    url: https://repo.cloudlinux.com/cloudlinux/sources/cln/cldeploy
+    dest: /usr/src
+    mode: u+x
+
+- name: Install wget if is not installed (needed by cldeploy script)
+  ansible.builtin.package:
+    name: wget
+    state: present
+
+- name: Begin CloudLinux installation with key
+  ansible.builtin.command:
+    "sh /usr/src/cldeploy -k {{ cloudlinux_key }}"
+  when: cloudlinux_key != "empty key"
+  notify: Reboot server
+
+- name: Begin CloudLinux installation with IP
+  ansible.builtin.command:
+    sh /usr/src/cldeploy -i
+  when: cloudlinux_key == "empty key"
+  notify: Reboot server
