@@ -1,28 +1,27 @@
 ---
 - name: Convert OS into CloudLinux
-  hosts: all
+  hosts: local
+  become: true
   vars:
-    downloadsPath: /usr/local/src/downloads
-
+    cloudlinux_key: key empty
   tasks:
-    - name: Check if download directory exists
-      stat:
-        path: '{{ downloadsPath }}'
-      register: downloads
-
-    - name: Test message to check downloads directory
-      debug:
-        msg: '{{ downloadsPath }} Downloads directory exists'
-      when: not downloads.stat.exists
-
-    - name: Create downloads directory
-      file:
-        path: '{{ downloadsPath }}'
-        state: directory
-      when: not downloads.stat.exists
-
     - name: Download CloudLinux deploy script
-      get_url:
+      ansible.builtin.get_url:
         url: https://repo.cloudlinux.com/cloudlinux/sources/cln/cldeploy
-        dest: '{{ downloadsPath }}/cloudlinux'
+        dest: /usr/src
         mode: u+x
+
+    - name: Install wget if is not installed (needed by cldeploy script)
+      ansible.builtin.package:
+        name: wget
+        state: present
+
+    - name: Begin CloudLinux installation with key
+      ansible.builtin.command:
+        'sh /usr/src/cldeploy -k {{ cloudlinux_key }}'
+      when: cloudlinux_key != "key empty"
+
+    - name: Begin CloudLinux installation with IP
+      ansible.builtin.command:
+        sh /usr/src/cldeploy -i
+      when: cloudlinux_key == "key empty"
