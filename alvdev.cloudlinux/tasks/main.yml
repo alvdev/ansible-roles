@@ -1,9 +1,10 @@
 ---
-- name: Check if CloudLinux is installed
+- name: Check if CloudLinux is not installed
   ansible.builtin.command:
     rhn_check
   register: rhn_check
-  changed_when: rhn_check.stdout.find('ERROR') != -1
+  failed_when: "'ERROR' not in rhn_check.stdout"
+  changed_when: false
 
 - name: Download CloudLinux deploy script
   ansible.builtin.get_url:
