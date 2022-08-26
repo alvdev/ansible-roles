@@ -2,7 +2,12 @@
 - name: Deploy servers
   hosts: local
   roles:
-    - role: alvdev.aliases
-      become: false
+    #- role: alvdev.aliases
+    #  become: false
+    #  vars:
+    #    aliases_user: alvdev
+
+    - role: alvdev.cloudlinux
+      become: true
       vars:
-        aliases_user: alvdev
+        cloudlinux_key: empty key
