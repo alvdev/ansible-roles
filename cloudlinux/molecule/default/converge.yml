@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include alvdev.cloudlinux"
+      include_role:
+        name: "alvdev.cloudlinux"
