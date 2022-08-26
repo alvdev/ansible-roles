@@ -5,29 +5,40 @@
   vars:
     cloudlinux_key: empty key
   tasks:
-    - name: Download CloudLinux deploy script
-      ansible.builtin.get_url:
-        url: https://repo.cloudlinux.com/cloudlinux/sources/cln/cldeploy
-        dest: /usr/src
-        mode: u+x
-
-    - name: Install wget if is not installed (needed by cldeploy script)
-      ansible.builtin.package:
-        name: wget
-        state: present
-
-    - name: Begin CloudLinux installation with key
+    - name: Check if CloudLinux is installed
       ansible.builtin.command:
-        "sh /usr/src/cldeploy -k {{ cloudlinux_key }}"
-      register: with_key
-      when: cloudlinux_key != "empty key"
+        rhn_check
+      register: rhn_check
+      ignore_errors: true
 
-    - name: Begin CloudLinux installation with IP
-      ansible.builtin.command:
-        sh /usr/src/cldeploy -i
-      register: with_ip
-      when: cloudlinux_key == "empty key"
+    - name : Debug
+      debug:
+        msg: Is not installed
+      when: rhn_check.stdout.find('ERROR') != -1
 
-    - name: Reboot server if successfully installed
-      ansible.builtin.reboot:
-      when: with_key.changed or with_ip.changed
+    #- name: Download CloudLinux deploy script
+    #  ansible.builtin.get_url:
+    #    url: https://repo.cloudlinux.com/cloudlinux/sources/cln/cldeploy
+    #    dest: /usr/src
+    #    mode: u+x
+
+    #- name: Install wget if is not installed (needed by cldeploy script)
+    #  ansible.builtin.package:
+    #    name: wget
+    #    state: present
+
+    #- name: Begin CloudLinux installation with key
+    #  ansible.builtin.command:
+    #    "sh /usr/src/cldeploy -k {{ cloudlinux_key }}"
+    #  register: with_key
+    #  when: cloudlinux_key != "empty key"
+
+    #- name: Begin CloudLinux installation with IP
+    #  ansible.builtin.command:
+    #    sh /usr/src/cldeploy -i
+    #  register: with_ip
+    #  when: cloudlinux_key == "empty key"
+
+    #- name: Reboot server if successfully installed
+    #  ansible.builtin.reboot:
+    #  when: with_key.changed or with_ip.changed
