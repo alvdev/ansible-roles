@@ -1,10 +1,18 @@
 ---
-- name: Check if CloudLinux is not installed
-  ansible.builtin.command:
-    rhn_check
-  register: rhn_check
-  failed_when: "'ERROR' not in rhn_check.stdout"
-  changed_when: false
+- name: Check CloudLinux installation
+  ansible.builtin.stat:
+    path: /usr/bin/cldetect
+  register: cldetect
+
+- name: CloudLinux installation status
+  ansible.builtin.debug:
+    msg: "CloudLinux is already installed"
+  when: cldetect.stat.exists
+  failed_when: cldetect.stat.exists
+
+- name: Continue playbook
+  ansible.builtin.debug:
+    msg: CL is not installed. Installation continue
 
 - name: Download CloudLinux deploy script
   ansible.builtin.get_url:
