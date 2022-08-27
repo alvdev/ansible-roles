@@ -1,0 +1,65 @@
+---
+- name: Backup cPanel config files
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Backup cPanel source server files
+      command:
+        "/usr/local/cpanel/bin/cpconftool --backup --modules={{ item }}"
+      with_items: 
+        - cpanel::easy::apache
+        #- cpanel::smtp::exim
+        #- cpanel::system::autossloptions
+        #- cpanel::system::backups
+        #- cpanel::system::greylist
+        #- cpanel::system::hulk
+        #- cpanel::system::modsecurity
+        #- cpanel::system::mysql
+        #- cpanel::system::whmconf
+        #- cpanel::ui::themes 
+
+    - name: Find files to copy
+      find:
+        paths: /home
+        patterns: "whm-config-*"
+        file_type: file
+      register: config_files
+
+    - name: DEBUG found files
+      debug:
+        msg: "Files found: {{ config_files }}"
+
+    - name: Copy found files to local server
+      fetch:
+        src: "{{ item.path }}"
+        dest: "~/.ansible/testing/files/{{ inventory_hostname }}/{{ item.path }}"
+        flat: yes
+      with_items:
+        - "{{ config_files.files }}"
+
+    - name: Find local config files
+      find:
+        paths: /home/alvdev/.ansible/testing/files/alma/home/
+        patterns: whm-config-*
+        file_type: file
+      register: local_files
+
+    - name: Debug local files path
+      debug:
+        msg: "LOCAL FILES PATH: {{ local_files }}"
+
+    - name: Copy config files to destination server
+      copy:
+        src: "/home/alvdev/.ansible/testing/files/{{ inventory_hostname }}/{{ item.path }}"
+        dest: "/home/cpanel_config_files/"
+      with_items:
+        - "{{ config_files.files }}"
+
+    - name: Remove generated files from remote source server
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items:
+        - "{{ config_files.files }}"
+
