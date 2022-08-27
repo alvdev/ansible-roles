@@ -12,4 +12,7 @@
 
 - name: Continue installation
   ansible.builtin.include_tasks:
-    install-cloudlinux.yml
+    "{{ item }}"
+  with_items:
+    - install-cloudlinux.yml
+    - install-imunify.yml

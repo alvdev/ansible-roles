@@ -1,0 +1,21 @@
+- name: Check Inmunify installation
+  ansible.builtin.stat:
+    path: /etc/sysconfig/imunify360/imunify360.config
+  register: imunify
+  changed_when: false
+
+- name: Download Imunify360 install script
+  ansible.builtin.get_url:
+    url: https://repo.imunify360.cloudlinux.com/defence360/i360deploy.sh
+    dest: /usr/src
+    mode: u+x
+
+- name: Install Imunify360 with key
+  ansible.builtin.command:
+    "sh i360deploy.sh --key {{ imunify_key }}"
+  when: imunify_key != "empty key"
+
+- name: Install Imunify360 with IP
+  ansible.builtin.command:
+    sh i360deploy.sh
+  when: imunify_key == "empty key"
