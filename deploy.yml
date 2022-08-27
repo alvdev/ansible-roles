@@ -1,6 +1,7 @@
 ---
 - name: Deploy servers
   hosts: local
+  become: true
   roles:
     #- role: alvdev.aliases
     #  become: false
@@ -8,6 +9,6 @@
     #    aliases_user: alvdev
 
     - role: alvdev.cloudlinux
-      become: true
       vars:
         cloudlinux_key: empty key
+        imunify_key: empty key
