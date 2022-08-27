@@ -1,6 +1,6 @@
 ---
 - name: Backup cPanel config files
-  hosts: all
+  hosts: local
   gather_facts: no
 
   tasks:

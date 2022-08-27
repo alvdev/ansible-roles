@@ -1,6 +1,6 @@
 ---
 - name: Install cPanel
-  hosts: all
+  hosts: local
   vars:
     - downloadsFolder: '/usr/local/src/downloads'
   tasks:
