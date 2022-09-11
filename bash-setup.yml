@@ -2,10 +2,22 @@
 - name: Setup bash
   hosts: all
   become: true
+  vars:
+    bash_user: alvdev
   tasks:
+    - name: Set bashrc path for Ubuntu
+      set_fact:
+        bashrc_path: /home/{{ bash_user }}/.bashrc
+      when: ansible_os_family == "Debian"
+
+    - name: Set bashrc path for RedHat
+      set_fact:
+        bashrc_path: /etc/bashrc
+      when: ansible_os_family == "RedHat"
+
     - name: Configure prompt
       blockinfile:
-        path: /etc/bashrc
+        path: "{{ bashrc_path }}"
         marker: "# {mark} ANSIBLE MANAGED BLOCK for bash prompt"
         block: |
           force_color_prompt=yes
