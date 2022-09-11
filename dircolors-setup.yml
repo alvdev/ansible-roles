@@ -3,9 +3,19 @@
   hosts: all
   become: true
   tasks:
+    - name: Set dircolors path for Ubuntu
+      ansible.builtin.set_fact:
+        dircolors_path: /etc/dircolors
+      when: ansible_os_family == "Debian"
+
+    - name: Set dircolors path for Redhat
+      ansible.builtin.set_fact:
+        dircolor_path: "{{ dircolors_path }}"  
+      when: ansible_os_family == "RedHat"
+
     - name: Check if DIR_COLORS file exists on Ubuntu
       ansible.builtin.stat:
-        path: /etc/DIR_COLORS
+        path: "{{ dircolors_path }}"
       register: dircolors
     
     #
@@ -13,7 +23,7 @@
     #
     - name: Create DIR_COLORS if doesn't exist
       ansible.builtin.file:
-        path: /etc/DIR_COLORS
+        path: "{{ dircolors_path }}"
         owner: root
         group: root
         mode: 0644
@@ -22,20 +32,20 @@
 
     - name: Add dircolors template to file
       ansible.builtin.shell:
-        dircolors -p > /etc/DIR_COLORS
+        dircolors -p > "{{ dircolors_path }}"
       when:
         dircolors.stat.exists
 
 
     - name: Configure colors
       ansible.builtin.blockinfile:
-        path: /etc/DIR_COLORS
+        path: "{{ dircolors_path }}"
         marker: "# {mark} ANSIBLE MANAGED BLOCK for dircolors"
         block: |
           OTHER_WRITABLE 04;31;01
 
     - name: Insert blank line before the marker
       ansible.builtin.lineinfile:
-        path: /etc/DIR_COLORS
+        path: "{{ dircolors_path }}"
         insertbefore: "^# BEGIN ANSIBLE MANAGED BLOCK"
         line: ""
