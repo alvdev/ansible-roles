@@ -3,7 +3,7 @@
 - hosts: all
   become: true
   vars:
-    vim_user: user
+    vim_user: alvdev
   tasks:
     - name: Install Vim
       package:
