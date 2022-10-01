@@ -92,7 +92,7 @@
          set history=1000
          set nu
          syntax on
-         "set cursorline"
+         "set cursorline
          set mouse=a
          filetype on
          filetype indent on
