@@ -1,0 +1,6 @@
+0 5 * * * /usr/local/src/crons/learnspam.sh
+
+#!/usr/bin/sh
+
+/usr/local/cpanel/3rdparty/bin/sa-learn --no-sync --spam /home/*/mail/.*\@*/.spam/{cur,new};
+/usr/local/cpanel/3rdparty/bin/sa-learn --no-sync --spam /home/*/mail/.*\@*/.Junk/{cur,new}
