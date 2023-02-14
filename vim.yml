@@ -187,3 +187,24 @@
          hi User2 ctermfg=007 ctermbg=236 guibg=#303030 guifg=#adadad
          hi User3 ctermfg=236 ctermbg=236 guibg=#303030 guifg=#303030
          hi User4 ctermfg=239 ctermbg=239 guibg=#4e4e4e guifg=#4e4e4e
+
+         inoremap ( ()<left>
+         inoremap [ []<left>
+         inoremap { {}<left>
+         inoremap {<CR> {<CR>}<ESC>O
+         inoremap {;<CR> {<CR>};<ESC>O
+         inoremap () ()<left>
+         
+         " To the begin/end of the line in insert mode
+         inoremap <C-a> <C-o>0
+         inoremap <C-e> <C-o>$
+         
+         "
+         set colorcolumn=80
+         " Avoid insert char pairs again if closing char exists
+         inoremap <expr> ) getline('.')[getpos('.')[2] - 1] == ')' ? '<Right>' : ')'
+         inoremap <expr> } getline('.')[getpos('.')[2] - 1] == '}' ? '<Right>' : '}'
+         inoremap <expr> ] getline('.')[getpos('.')[2] - 1] == ']' ? '<Right>' : ']'
+         inoremap <expr> " getline('.')[getpos('.')[2] - 1] == '"' ? '<Right>' : '""<Le
+         ft>'
+         inoremap <expr> ' getline('.')[getpos('.')[2] - 1] == "'" ? '<Right>' : "''<Left>"
